@@ -15,7 +15,7 @@ weights: {
     # "bleach":"package://dope/weights/bleach_28_dr.pth"
     
     # NEW OBJECTS - HOPE
-    "AlphabetSoup":"package://dope/weights/AlphabetSoup.pth", 
+    # "AlphabetSoup":"package://dope/weights/AlphabetSoup.pth", 
     # "BBQSauce":"package://dope/weights/BBQSauce.pth", 
     # "Butter":"package://dope/weights/Butter.pth", 
     # "Cherries":"package://dope/weights/Cherries.pth", 
