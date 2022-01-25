@@ -294,6 +294,7 @@ class DopeNode(object):
 
                 # transform orientation
                 transformed_ori = tf.transformations.quaternion_multiply(ori, self.model_transforms[m])
+                transformed_ori_world = tf.transformations.quaternion_multiply(transformed_ori, cam2world_rot)
 
                 # rotate bbox dimensions if necessary
                 # (this only works properly if model_transform is in 90 degree angles)
@@ -307,10 +308,10 @@ class DopeNode(object):
                 pose_msg.pose.position.x = ( loc[2] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[0]
                 pose_msg.pose.position.y = ( loc[0] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[1]
                 pose_msg.pose.position.z = ( -1 * loc[1] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[2]
-                pose_msg.pose.orientation.x = transformed_ori[0]
-                pose_msg.pose.orientation.y = transformed_ori[1]
-                pose_msg.pose.orientation.z = transformed_ori[2]
-                pose_msg.pose.orientation.w = transformed_ori[3]
+                pose_msg.pose.orientation.x = transformed_ori_world[0]
+                pose_msg.pose.orientation.y = transformed_ori_world[1]
+                pose_msg.pose.orientation.z = transformed_ori_world[2]
+                pose_msg.pose.orientation.w = transformed_ori_world[3]
 
                 print(pose_msg.pose)
                 print()
