@@ -15,7 +15,7 @@ weights: {
     # "bleach":"package://dope/weights/bleach_28_dr.pth"
     
     # NEW OBJECTS - HOPE
-    "AlphabetSoup":"package://dope/weights/AlphabetSoup.pth", 
+    # "AlphabetSoup":"package://dope/weights/AlphabetSoup.pth", 
     # "BBQSauce":"package://dope/weights/BBQSauce.pth", 
     # "Butter":"package://dope/weights/Butter.pth", 
     # "Cherries":"package://dope/weights/Cherries.pth", 
@@ -137,10 +137,10 @@ draw_colors: {
 
 # optional: provide a transform that is applied to the pose returned by DOPE
 model_transforms: {
-#    "cracker": [[ 0,  0,  1,  0],
-#                [ 0, -1,  0,  0],
-#                [ 1,  0,  0,  0],
-#                [ 0,  0,  0,  1]]
+   "cracker": [[ 0,  0,  1,  0],
+               [ 0, -1,  0,  0],
+               [ 1,  0,  0,  0],
+               [ 0,  0,  0,  1]]
 }
 
 # optional: if you provide a mesh of the object here, a mesh marker will be

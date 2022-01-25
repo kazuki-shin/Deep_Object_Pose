@@ -261,7 +261,7 @@ class DopeNode(object):
 
         # Lookup camera pose to world frame transform
         try:
-            (cam2world_trans, cam2world_rot) = self.listener.lookupTransform('/world', '/robot1/camera_link', rospy.Time(0))
+            (cam2world_trans, cam2world_rot) = self.tf_listener.lookupTransform('/world', '/robot1/camera_link', rospy.Time(0))
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             exit
 
@@ -288,6 +288,8 @@ class DopeNode(object):
                 loc = result["location"]
                 ori = result["quaternion"]
 
+                import ipdb; ipdb.set_trace()
+
                 # transform orientation
                 transformed_ori = tf.transformations.quaternion_multiply(ori, self.model_transforms[m])
                 transformed_ori_world = tf.transformations.quaternion_multiply(transformed_ori, cam2world_rot)
@@ -295,16 +297,16 @@ class DopeNode(object):
                 # rotate bbox dimensions if necessary
                 # (this only works properly if model_transform is in 90 degree angles)
                 dims = rotate_vector(vector=self.dimensions[m], quaternion=self.model_transforms[m])
-                dims = rotate_vector(vector=dims, quaternion=cam2world_rot)
+                # dims = rotate_vector(vector=dims, quaternion=cam2world_rot)
                 dims = np.absolute(dims)
                 dims = tuple(dims)
 
                 pose_msg = PoseStamped()
                 pose_msg.header = image_msg.header
                 CONVERT_SCALE_CM_TO_METERS = 100
-                pose_msg.pose.position.x = ( loc[0] / CONVERT_SCALE_CM_TO_METERS ) + cam2world_trans[0]
-                pose_msg.pose.position.y = ( loc[1] / CONVERT_SCALE_CM_TO_METERS ) + cam2world_trans[1]
-                pose_msg.pose.position.z = ( loc[2] / CONVERT_SCALE_CM_TO_METERS ) + cam2world_trans[2]
+                pose_msg.pose.position.x = ( loc[0] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[0]
+                pose_msg.pose.position.y = ( loc[1] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[1]
+                pose_msg.pose.position.z = ( loc[2] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[2]
                 pose_msg.pose.orientation.x = transformed_ori_world[0]
                 pose_msg.pose.orientation.y = transformed_ori_world[1]
                 pose_msg.pose.orientation.z = transformed_ori_world[2]
