@@ -17,7 +17,6 @@ import numpy as np
 import resource_retriever
 import rospy
 import tf.transformations
-import tf
 from PIL import Image
 from PIL import ImageDraw
 from cv_bridge import CvBridge
@@ -29,6 +28,9 @@ from sensor_msgs.msg import CameraInfo, Image as ImageSensor_msg
 from std_msgs.msg import String
 from vision_msgs.msg import Detection3D, Detection3DArray, ObjectHypothesisWithPose
 from visualization_msgs.msg import Marker, MarkerArray
+
+import tf2_ros
+import tf2_geometry_msgs
 
 
 class Draw(object):
@@ -123,7 +125,9 @@ class DopeNode(object):
         self.config_detect.thresh_map = rospy.get_param('~thresh_map', 0.01)
         self.config_detect.sigma = rospy.get_param('~sigma', 3)
         self.config_detect.thresh_points = rospy.get_param("~thresh_points", 0.1)
-        self.tf_listener = tf.TransformListener()
+
+        self.tf_buffer = tf2_ros.Buffer(rospy.Duration(100))
+        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
 
         # For each object to detect, load network model, create PNP solver, and start ROS publishers
         for model, weights_url in rospy.get_param('~weights').items():
@@ -288,11 +292,8 @@ class DopeNode(object):
                 loc = result["location"]
                 ori = result["quaternion"]
 
-                import ipdb; ipdb.set_trace()
-
                 # transform orientation
                 transformed_ori = tf.transformations.quaternion_multiply(ori, self.model_transforms[m])
-                transformed_ori_world = tf.transformations.quaternion_multiply(transformed_ori, cam2world_rot)
 
                 # rotate bbox dimensions if necessary
                 # (this only works properly if model_transform is in 90 degree angles)
@@ -307,10 +308,10 @@ class DopeNode(object):
                 pose_msg.pose.position.x = ( loc[0] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[0]
                 pose_msg.pose.position.y = ( loc[1] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[1]
                 pose_msg.pose.position.z = ( loc[2] / CONVERT_SCALE_CM_TO_METERS ) #+ cam2world_trans[2]
-                pose_msg.pose.orientation.x = transformed_ori_world[0]
-                pose_msg.pose.orientation.y = transformed_ori_world[1]
-                pose_msg.pose.orientation.z = transformed_ori_world[2]
-                pose_msg.pose.orientation.w = transformed_ori_world[3]
+                pose_msg.pose.orientation.x = transformed_ori[0]
+                pose_msg.pose.orientation.y = transformed_ori[1]
+                pose_msg.pose.orientation.z = transformed_ori[2]
+                pose_msg.pose.orientation.w = transformed_ori[3]
 
                 # Publish
                 self.pubs[m].publish(pose_msg)
