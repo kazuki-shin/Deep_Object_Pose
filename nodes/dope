@@ -29,9 +29,6 @@ from std_msgs.msg import String
 from vision_msgs.msg import Detection3D, Detection3DArray, ObjectHypothesisWithPose
 from visualization_msgs.msg import Marker, MarkerArray
 
-import tf2_ros
-import tf2_geometry_msgs
-
 
 class Draw(object):
     """Drawing helper class to visualize the neural network output"""
@@ -125,9 +122,6 @@ class DopeNode(object):
         self.config_detect.thresh_map = rospy.get_param('~thresh_map', 0.01)
         self.config_detect.sigma = rospy.get_param('~sigma', 3)
         self.config_detect.thresh_points = rospy.get_param("~thresh_points", 0.1)
-        self.tf_listener = tf.TransformListener()
-        # self.tf_buffer = tf2_ros.Buffer(rospy.Duration(100))
-        # self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
 
         # For each object to detect, load network model, create PNP solver, and start ROS publishers
         for model, weights_url in rospy.get_param('~weights').items():
@@ -263,12 +257,6 @@ class DopeNode(object):
         detection_array = Detection3DArray()
         detection_array.header = image_msg.header
 
-        # Lookup camera pose to world frame transform
-        try:
-            (cam2world_trans, cam2world_rot) = self.tf_listener.lookupTransform('/world', '/robot1/camera_link', rospy.Time(0))
-        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            exit
-
         for m in self.models:
             publish_belief_img = (self.pub_belief[m].get_num_connections() > 0)
 
@@ -289,12 +277,8 @@ class DopeNode(object):
                 loc = result["location"]
                 ori = result["quaternion"]
 
-                print(result)
-                print()
-
                 # transform orientation
                 transformed_ori = tf.transformations.quaternion_multiply(ori, self.model_transforms[m])
-                # transformed_ori_world = tf.transformations.quaternion_multiply(transformed_ori, cam2world_rot)
 
                 # rotate bbox dimensions if necessary
                 # (this only works properly if model_transform is in 90 degree angles)
@@ -305,16 +289,37 @@ class DopeNode(object):
                 pose_msg = PoseStamped()
                 pose_msg.header = image_msg.header
                 CONVERT_SCALE_CM_TO_METERS = 100
-                pose_msg.pose.position.x = ( loc[2] / CONVERT_SCALE_CM_TO_METERS ) 
-                pose_msg.pose.position.y = ( loc[0] / CONVERT_SCALE_CM_TO_METERS ) 
-                pose_msg.pose.position.z = ( -1 * loc[1] / CONVERT_SCALE_CM_TO_METERS ) 
-                pose_msg.pose.orientation.x = transformed_ori[0]
-                pose_msg.pose.orientation.y = transformed_ori[1]
-                pose_msg.pose.orientation.z = transformed_ori[2]
-                pose_msg.pose.orientation.w = transformed_ori[3]
+                
+                # Frames: Camera Frame: c
+                #         OpenCV Frame: o
+                #    DOPE Object Frame: d
 
-                print(pose_msg.pose)
-                print()
+                # HTM of DOPE Object in OpenCV: T_od consisting of R_od and p_od
+                T_od = tf.transformations.translation_matrix(loc / CONVERT_SCALE_CM_TO_METERS)
+                R_od = tf.transformations.quaternion_matrix(transformed_ori)
+                T_od[:3,:3] = R_od
+
+                # HTM of OpenCV frame in Camera frame: T_co consisting of R_co and no translation
+                R_co = np.array([[ 0,  0,  1],
+                                 [-1,  0,  0],
+                                 [ 0, -1,  0]])
+                T_co = np.identity(4)
+                T_co[:3,:3] = R_co
+
+                # HTM of DOPE Object in Camera frame: T_cd = T_co * T_od
+                T_cd = np.matmul(T_co, T_od)
+
+                # Extract quaternion from R_cd
+                q_cd = tf.transformations.quaternion_from_matrix(T_cd[:3,:3])
+
+                # Fill in pose data
+                pose_msg.pose.position.x = T_cd[3,0]
+                pose_msg.pose.position.y = T_cd[3,1]
+                pose_msg.pose.position.z = T_cd[3,2]
+                pose_msg.pose.orientation.x = q_cd[0]
+                pose_msg.pose.orientation.y = q_cd[1]
+                pose_msg.pose.orientation.z = q_cd[2]
+                pose_msg.pose.orientation.w = q_cd[3]
 
                 # Publish
                 self.pubs[m].publish(pose_msg)
