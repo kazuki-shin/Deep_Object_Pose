@@ -256,6 +256,7 @@ class DopeNode(object):
 
         detection_array = Detection3DArray()
         detection_array.header = image_msg.header
+        print(image_msg.header)
 
         for m in self.models:
             publish_belief_img = (self.pub_belief[m].get_num_connections() > 0)
@@ -286,18 +287,13 @@ class DopeNode(object):
                 dims = np.absolute(dims)
                 dims = tuple(dims)
 
-                pose_msg = PoseStamped()
-                pose_msg.header = image_msg.header
-                CONVERT_SCALE_CM_TO_METERS = 100
-                
                 # Frames: Camera Frame: c
                 #         OpenCV Frame: o
                 #    DOPE Object Frame: d
 
                 # HTM of DOPE Object in OpenCV: T_od consisting of R_od and p_od
-                T_od = tf.transformations.translation_matrix(loc / CONVERT_SCALE_CM_TO_METERS)
-                R_od = tf.transformations.quaternion_matrix(transformed_ori)
-                T_od[:3,:3] = R_od
+                T_od = tf.transformations.quaternion_matrix(transformed_ori)
+                T_od[:3,3] = loc
 
                 # HTM of OpenCV frame in Camera frame: T_co consisting of R_co and no translation
                 R_co = np.array([[ 0,  0,  1],
@@ -310,16 +306,22 @@ class DopeNode(object):
                 T_cd = np.matmul(T_co, T_od)
 
                 # Extract quaternion from R_cd
-                q_cd = tf.transformations.quaternion_from_matrix(T_cd[:3,:3])
+                q_cd = tf.transformations.quaternion_from_matrix(T_cd)
 
                 # Fill in pose data
-                pose_msg.pose.position.x = T_cd[3,0]
-                pose_msg.pose.position.y = T_cd[3,1]
-                pose_msg.pose.position.z = T_cd[3,2]
+                pose_msg = PoseStamped()
+                pose_msg.header = image_msg.header
+                CONVERT_SCALE_CM_TO_METERS = 100
+
+                pose_msg.pose.position.x = loc[2] / CONVERT_SCALE_CM_TO_METERS
+                pose_msg.pose.position.y = -1 * loc[0] / CONVERT_SCALE_CM_TO_METERS
+                pose_msg.pose.position.z = -1 * loc[1] / CONVERT_SCALE_CM_TO_METERS
                 pose_msg.pose.orientation.x = q_cd[0]
                 pose_msg.pose.orientation.y = q_cd[1]
                 pose_msg.pose.orientation.z = q_cd[2]
                 pose_msg.pose.orientation.w = q_cd[3]
+
+                # print(pose_msg.pose)
 
                 # Publish
                 self.pubs[m].publish(pose_msg)
