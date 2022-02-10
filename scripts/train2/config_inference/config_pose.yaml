@@ -6,7 +6,7 @@ downscale_height: 500      # if the input image is larger than this, scale it do
 
 # Comment any of these lines to prevent detection / pose estimation of that object
 weights: {
-    "cracker":"package://dope/weights/cracker_60.pth",
+    # "cracker":"package://dope/weights/cracker_60.pth",
     # "gelatin":"package://dope/weights/gelatin_60.pth",
     # "meat":"package://dope/weights/meat_20.pth",
     # "mustard":"package://dope/weights/mustard_60.pth",
@@ -18,17 +18,20 @@ weights: {
     # 'pudding':"weights_dope/pudding.pth"
     # 'pudding':"weights_dope/dope_network/net_epoch_60.pth"
     # 'alphabet_soup':"weights_dope/resnet_simple/alphabe_soup.pth"
+    "spoon":"/home/kimlab/catkin_ws/src/Deep_Object_Pose/weights/spoon_1.pth",
 }
 
 # Type of neural network architecture
 architectures: {
     'cracker':"dope",
     'alphabet_soup':'resnet_simple',   
+    'spoon' : "dope",
 }
 
 
 # Cuboid dimension in cm x,y,z
 dimensions: {
+    "spoon" : [5,5,5],
     "cracker": [16.403600692749023,21.343700408935547,7.179999828338623],
     "gelatin": [8.918299674987793, 7.311500072479248, 2.9983000755310059],
     "meat": [10.164673805236816,8.3542995452880859,5.7600898742675781],
@@ -55,6 +58,7 @@ class_ids: {
     "cube_red": 9,
     'pudding': 10,
     'alphabet_soup': 12,
+    'spoon' : 13,
 }
 
 draw_colors: {
@@ -68,6 +72,7 @@ draw_colors: {
     "peg_hole": [232, 222, 12],  # yellow
     "cube_red": [255,0,0],
     "pudding": [255,0,0],
+    "spoon": [13, 255, 128],  # green
 }
 
 # optional: provide a transform that is applied to the pose returned by DOPE
@@ -100,6 +105,7 @@ mesh_scales: {
     "soup":    0.01,
     "sugar":   0.01,
     "bleach":  0.01,
+    "spoon" : 0.001
 }
 
 # Config params for DOPE
