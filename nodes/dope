@@ -256,7 +256,7 @@ class DopeNode(object):
 
         detection_array = Detection3DArray()
         detection_array.header = image_msg.header
-        print(image_msg.header)
+        # print(image_msg.header)
 
         for m in self.models:
             publish_belief_img = (self.pub_belief[m].get_num_connections() > 0)
