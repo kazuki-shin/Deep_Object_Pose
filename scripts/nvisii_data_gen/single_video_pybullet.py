@@ -231,8 +231,9 @@ names_to_export = []
 
 def adding_mesh_object(name, obj_to_load,texture_to_load,scale=1):
     global mesh_loaded, visii_pybullet, names_to_export
-    # obj_to_load = toy_to_load + "/meshes/model.obj"
-    # texture_to_load = toy_to_load + "/materials/textures/texture.png"
+    # obj_to_load = toy_to_load + "/home/kazuki/.gazebo/models/003_cracker_box/google_16k/textured.obj"
+    # texture_to_load = toy_to_load + "/home/kazuki/.gazebo/models/003_cracker_box/google_16k/textured.png"
+
 
     print("loading:",obj_to_load)
 
@@ -317,10 +318,10 @@ for i_obj in range(int(opt.nb_objects)):
 
     toy_to_load = google_content_folder[random.randint(0,len(google_content_folder)-1)]
 
-    obj_to_load = toy_to_load + "/google_16k/textured.obj"
-    texture_to_load = toy_to_load + "/google_16k/texture_map_flat.png"
-    name = "hope_" + toy_to_load.split('/')[-2] + f"_{i_obj}"
-    adding_mesh_object(name,obj_to_load,texture_to_load,scale=0.01)
+    obj_to_load = toy_to_load + "/model.stl"
+    texture_to_load = toy_to_load + "/texture_map.png"
+    name = "kimlab_" + toy_to_load.split('/')[-2] + f"_{i_obj}"
+    adding_mesh_object(name,obj_to_load,texture_to_load,scale=0.001)
 
     # p.applyExternalTorque(id_pybullet,-1,
     #     [   random.uniform(-force_rand,force_rand),
