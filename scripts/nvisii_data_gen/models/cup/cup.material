@@ -7,7 +7,7 @@ material plastic
       texture_unit
       {
         // Relative to the location of the material script
-        texture ../spoon/texture_map.png
+        texture ../cup/texture_map.png
       }
     }
   }

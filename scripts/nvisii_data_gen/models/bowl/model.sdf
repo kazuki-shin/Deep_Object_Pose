@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <sdf version="1.4">
-  <model name="spoon">
+  <model name="bowl">
     <pose>0 0 0  1.57 0 0</pose>
     <static>false</static>
     <link name="body">
@@ -20,7 +20,7 @@
           <geometry>
             <mesh>
               <!-- Use a downsampled mesh for collisions -->
-              <uri>model://spoon/meshes/model.stl</uri>
+              <uri>model://bowl/meshes/model.stl</uri>
               <scale>0.001 0.001 0.001</scale>
             </mesh>
           </geometry>
@@ -36,13 +36,13 @@
       <visual name="visual">
         <geometry>
           <mesh>
-            <uri>model://spoon/meshes/model.stl</uri>
+            <uri>model://bowl/meshes/model.stl</uri>
             <scale>0.001 0.001 0.001</scale>
           </mesh>
         </geometry>
         <material>
           <script>
-            <uri>model://spoon/spoon.material</uri>
+            <uri>model://bowl/bowl.material</uri>
             <name>plastic</name>
           </script>
         </material>

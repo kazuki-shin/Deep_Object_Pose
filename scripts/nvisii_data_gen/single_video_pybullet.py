@@ -395,12 +395,10 @@ else:
 
         toy_to_load = google_content_folder[random.randint(0,len(google_content_folder)-1)]
 
-    obj_to_load = toy_to_load + "/model.stl"
+    obj_to_load = toy_to_load + "/meshes/model.stl"
     texture_to_load = toy_to_load + "/texture_map.png"
     name = "kimlab_" + toy_to_load.split('/')[-2] + f"_{i_obj}"
     adding_mesh_object(name,obj_to_load,texture_to_load,scale=0.001)
-
-        adding_mesh_object(name,obj_to_load,texture_to_load,scale=0.01)
 
         # p.applyExternalTorque(id_pybullet,-1,
         #     [   random.uniform(-force_rand,force_rand),
@@ -587,9 +585,16 @@ while condition:
             file_path = f"{opt.outf}/{str(i_render).zfill(5)}.depth.exr"
         )
 
+<<<<<<< HEAD
 # subprocess.call(['ffmpeg', '-y',\
 #     '-framerate', '30', "-hide_banner", "-loglevel", \
 #     "panic",'-pattern_type', 'glob', '-i',\
 #     f"{opt.outf}/*.png", f"{opt.outf}/video.mp4"])
+=======
+subprocess.call(['ffmpeg', '-y',\
+    '-framerate', '30', "-hide_banner", "-loglevel", \
+    "panic",'-pattern_type', 'glob', '-i',\
+    f"{opt.outf}/*.png", f"{opt.outf}/video.mp4"]) 
+>>>>>>> add generate massive dataset, train with generated data
 
 visii.deinitialize()
