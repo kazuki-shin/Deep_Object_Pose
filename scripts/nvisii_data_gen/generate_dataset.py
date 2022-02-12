@@ -18,7 +18,7 @@ for i in range(0,2):
 		'--static_camera',
 		# '--nb_frames', '1',
 		# '--nb_objects',str(1),
-		'--outf',f"dataset/{str(i).zfill(3)}",
+		'--outf',f"dataset_bowl_10k/{str(i).zfill(3)}",
 	]
 	subprocess.call(to_call)
 	# subprocess.call(['mv',f'dataset/{str(i).zfill(3)}/video.mp4',f"dataset/{str(i).zfill(3)}.mp4"])
