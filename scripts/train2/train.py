@@ -99,7 +99,7 @@ parser.add_argument('--optimizer', default='adam',
 parser.add_argument('--workers', type=int, help='number of data loading workers', default=8)
 parser.add_argument('--batchsize', type=int, default=32, help='input batch size')
 parser.add_argument('--imagesize', type=int, default=448, help='the height / width of the input image to network')
-parser.add_argument('--lr', type=float, default=0.0001, help='learning rate, default=0.001')
+parser.add_argument('--lr', type=float, default=0.0001, help='learning rate, default=0.0001')
 parser.add_argument('--noise', type=float, default=2.0, help='gaussian noise added to the image')
 parser.add_argument('--net', default='', help="path to net (to continue training)")
 parser.add_argument('--net_dope', default=None, help="path to pretrained dope_network")
