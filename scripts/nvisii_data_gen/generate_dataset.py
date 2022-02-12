@@ -5,17 +5,18 @@ import ipdb
 
 # 20 000 images
 
-for i in range(0,40):
+for i in range(0,5):
 	to_call = [
 		# "python",'single_video.py',
 		"python",'single_video_pybullet.py',
 		'--spp','10',
-		'--nb_frames', '200',
-		'--nb_objects',str(int(random.uniform(50,75))),
+		'--nb_frames', '2000',
+		'--nb_objects',str(int(random.uniform(5,20))),
+		'--nb_distractors',str(int(random.uniform(5,15))),
 		'--static_camera',
 		# '--nb_frames', '1',
 		# '--nb_objects',str(1),
-		'--outf',f"dataset/{str(i).zfill(3)}",
+		'--outf',f"dataset_bowl_10k/{str(i).zfill(3)}",
 	]
 	subprocess.call(to_call)
 	# subprocess.call(['mv',f'dataset/{str(i).zfill(3)}/video.mp4',f"dataset/{str(i).zfill(3)}.mp4"])
