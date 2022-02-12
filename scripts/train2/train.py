@@ -97,7 +97,8 @@ parser.add_argument('--objects',nargs='+', type=str, default=None,
 parser.add_argument('--optimizer', default='adam', 
     help='which optimizer to use, default=adam')
 parser.add_argument('--workers', type=int, help='number of data loading workers', default=8)
-parser.add_argument('--batchsize', type=int, default=32, help='input batch size')
+parser.add_argument('--batchsize', type=int, default=128, help='input batch size')
+parser.add_argument('--subbatchsize', type=int, default=10, help='input batch size')
 parser.add_argument('--imagesize', type=int, default=448, help='the height / width of the input image to network')
 parser.add_argument('--lr', type=float, default=0.0001, help='learning rate, default=0.0001')
 parser.add_argument('--noise', type=float, default=2.0, help='gaussian noise added to the image')
@@ -328,7 +329,7 @@ if not opt.data == "":
         objects = opt.objects
         )
     trainingdata = torch.utils.data.DataLoader(train_dataset,
-        batch_size = opt.batchsize, 
+        batch_size = opt.subbatchsize, 
         shuffle = True,
         num_workers = opt.workers, 
         pin_memory = True
@@ -344,7 +345,7 @@ if not opt.datatest == "":
         objects = opt.objects
         )
     testingdata = torch.utils.data.DataLoader(test_dataset,
-        batch_size = opt.testbatchsize, 
+        batch_size = opt.subbatchsize // 2, 
         shuffle = True,
         num_workers = opt.workers, 
         pin_memory = True
@@ -364,12 +365,12 @@ print('load models')
 
 
 
-# net = torch.nn.DataParallel(net,device_ids=opt.gpuids).cuda()
+net = torch.nn.DataParallel(net,device_ids=opt.gpuids).cuda()
 # net = torch.nn.DataParallel(net).cuda()
-net = torch.nn.parallel.DistributedDataParallel(net.cuda(),
-    device_ids=[opt.local_rank],
-    output_device=opt.local_rank)
-# print(net)
+# net = torch.nn.parallel.DistributedDataParallel(net.cuda(),
+#     device_ids=[opt.local_rank],
+#     output_device=opt.local_rank)
+print(net)
 
 if opt.net != '':
     net.load_state_dict(torch.load(opt.net))
@@ -554,18 +555,20 @@ def _runnetwork(epoch,train_loader,train=True,syn=False):
             loss.backward()
             # scaler.scale(loss).backward() 
                 
-            optimizer.step()
-            # scaler.step(optimizer)
+            if batch_idx % (opt.batchsize // opt.subbatchsize) == 0:
+                optimizer.step()
+                # scaler.step(optimizer)
 
-            # scaler.update()
-            nb_update_network+=1
-            
-            
-            # namefile = '/loss_train.txt'
-            # with open (opt.outf+namefile,'a') as file:
-            #     s = '{}, {},{:.15f}\n'.format(
-            #         epoch,batch_idx,loss.item()) 
-            #     file.write(s)
+                # scaler.update()
+                nb_update_network+=1
+                optimizer.zero_grad()
+                
+                
+                # namefile = '/loss_train.txt'
+                # with open (opt.outf+namefile,'a') as file:
+                #     s = '{}, {},{:.15f}\n'.format(
+                #         epoch,batch_idx,loss.item()) 
+                #     file.write(s)
         
         # log the loss
         loss_avg_to_log["loss"].append(loss.item())
