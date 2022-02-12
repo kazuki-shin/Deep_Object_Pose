@@ -54,8 +54,14 @@ parser.add_argument(
     obj directly.'
 )
 parser.add_argument(
+    '--path_single_obj_texture',
+    default=None,
+    help='If you have a single obj file, path to the \
+    obj texture directly.'
+)
+parser.add_argument(
     '--scale_single_obj',
-    default=1,
+    default=0.001,
     type=float,
     help='change the scale of the path_single_obj loaded.'
 )
@@ -384,7 +390,7 @@ if opt.path_single_obj is not None:
     for i_object in range(opt.nb_objects):
         adding_mesh_object(f"single_obj_{i_object}",
                             opt.path_single_obj,
-                            None,
+                            opt.path_single_obj_texture,
                             scale=opt.scale_single_obj)
 
 
@@ -395,17 +401,17 @@ else:
 
         toy_to_load = google_content_folder[random.randint(0,len(google_content_folder)-1)]
 
-    obj_to_load = toy_to_load + "/meshes/model.stl"
-    texture_to_load = toy_to_load + "/texture_map.png"
-    name = "kimlab_" + toy_to_load.split('/')[-2] + f"_{i_obj}"
-    adding_mesh_object(name,obj_to_load,texture_to_load,scale=0.001)
+        obj_to_load = toy_to_load + "/meshes/model.stl"
+        texture_to_load = toy_to_load + "/texture_map.png"
+        name = "kimlab_" + toy_to_load.split('/')[-2] + f"_{i_obj}"
+        adding_mesh_object(name,obj_to_load,texture_to_load,scale=0.001)
 
-        # p.applyExternalTorque(id_pybullet,-1,
-        #     [   random.uniform(-force_rand,force_rand),
-        #         random.uniform(-force_rand,force_rand),
-        #         random.uniform(-force_rand,force_rand)],
-        #     [0,0,0],
-        #     flags=p.WORLD_FRAME
+            # p.applyExternalTorque(id_pybullet,-1,
+            #     [   random.uniform(-force_rand,force_rand),
+            #         random.uniform(-force_rand,force_rand),
+            #         random.uniform(-force_rand,force_rand)],
+            #     [0,0,0],
+            #     flags=p.WORLD_FRAME
         # )
 
 
@@ -585,16 +591,9 @@ while condition:
             file_path = f"{opt.outf}/{str(i_render).zfill(5)}.depth.exr"
         )
 
-<<<<<<< HEAD
-# subprocess.call(['ffmpeg', '-y',\
-#     '-framerate', '30', "-hide_banner", "-loglevel", \
-#     "panic",'-pattern_type', 'glob', '-i',\
-#     f"{opt.outf}/*.png", f"{opt.outf}/video.mp4"])
-=======
 subprocess.call(['ffmpeg', '-y',\
     '-framerate', '30', "-hide_banner", "-loglevel", \
     "panic",'-pattern_type', 'glob', '-i',\
     f"{opt.outf}/*.png", f"{opt.outf}/video.mp4"]) 
->>>>>>> add generate massive dataset, train with generated data
 
 visii.deinitialize()

@@ -324,7 +324,7 @@ class DopeNode(object):
                 # print(pose_msg.pose)
 
                 # Publish
-                self.pubs[m].publish(obj_pose_world)
+                self.pubs[m].publish(pose_msg)
                 self.pub_dimension[m].publish(str(dims))
 
                 # Add to Detection3DArray
@@ -332,9 +332,9 @@ class DopeNode(object):
                 hypothesis = ObjectHypothesisWithPose()
                 hypothesis.id = self.class_ids[result["name"]]
                 hypothesis.score = result["score"]
-                hypothesis.pose.pose = obj_pose_world.pose
+                hypothesis.pose.pose = pose_msg.pose
                 detection.results.append(hypothesis)
-                detection.bbox.center = obj_pose_world.pose
+                detection.bbox.center = pose_msg.pose
                 detection.bbox.size.x = dims[0] / CONVERT_SCALE_CM_TO_METERS
                 detection.bbox.size.y = dims[1] / CONVERT_SCALE_CM_TO_METERS
                 detection.bbox.size.z = dims[2] / CONVERT_SCALE_CM_TO_METERS
