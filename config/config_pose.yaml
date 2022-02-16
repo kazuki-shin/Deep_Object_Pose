@@ -1,12 +1,12 @@
-topic_camera: "/robot1/camera/image_raw"
-topic_camera_info: "/robot1/camera/camera_info"
+topic_camera: "/dope/webcam/image_raw"
+topic_camera_info: "/dope/webcam/camera_info"
 topic_publishing: "dope"
 input_is_rectified: True   # Whether the input image is rectified (strongly suggested!)
-downscale_height: 500      # if the input image is larger than this, scale it down to this pixel height
+downscale_height: 480      # if the input image is larger than this, scale it down to this pixel height
 
 # Comment any of these lines to prevent detection / pose estimation of that object
 weights: {
-    "cracker":"package://dope/weights/cracker_60.pth",
+    # "cracker":"package://dope/weights/cracker_60.pth",
     # "gelatin":"package://dope/weights/gelatin_60.pth",
     # "meat":"package://dope/weights/meat_20.pth",
     # "mustard":"package://dope/weights/mustard_60.pth",
@@ -15,27 +15,27 @@ weights: {
     # "bleach":"package://dope/weights/bleach_28_dr.pth"
     
     # NEW OBJECTS - HOPE
-    # "AlphabetSoup":"package://dope/weights/AlphabetSoup.pth", 
+    "AlphabetSoup":"package://dope/weights/AlphabetSoup.pth", 
     # "BBQSauce":"package://dope/weights/BBQSauce.pth", 
     # "Butter":"package://dope/weights/Butter.pth", 
     # "Cherries":"package://dope/weights/Cherries.pth", 
     # "ChocolatePudding":"package://dope/weights/ChocolatePudding.pth", 
     # "Cookies":"package://dope/weights/Cookies.pth", 
-    # "Corn":"package://dope/weights/Corn.pth", 
-    # "CreamCheese":"package://dope/weights/CreamCheese.pth", 
-    # "GreenBeans":"package://dope/weights/GreenBeans.pth", 
+    "Corn":"package://dope/weights/Corn.pth", 
+    "CreamCheese":"package://dope/weights/CreamCheese.pth", 
+    "GreenBeans":"package://dope/weights/GreenBeans.pth", 
     # "GranolaBars":"package://dope/weights/GranolaBars.pth", 
     # "Ketchup":"package://dope/weights/Ketchup.pth", 
     # "MacaroniAndCheese":"package://dope/weights/MacaroniAndCheese.pth", 
     # "Mayo":"package://dope/weights/Mayo.pth", 
-    # "Milk":"package://dope/weights/Milk.pth", 
+    "Milk":"package://dope/weights/Milk.pth", 
     # "Mushrooms":"package://dope/weights/Mushrooms.pth", 
     # "Mustard":"package://dope/weights/Mustard.pth", 
-    # "Parmesan":"package://dope/weights/Parmesan.pth", 
+    "Parmesan":"package://dope/weights/Parmesan.pth", 
     # "PeasAndCarrots":"package://dope/weights/PeasAndCarrots.pth",
     # "Peaches":"package://dope/weights/Peaches.pth",
     # "Pineapple":"package://dope/weights/Pineapple.pth",
-    "Popcorn":"package://dope/weights/Popcorn.pth",
+    # "Popcorn":"package://dope/weights/Popcorn.pth",
     # "OrangeJuice":"package://dope/weights/OrangeJuice.pth", 
     # "Raisins":"package://dope/weights/Raisins.pth",
     # "SaladDressing":"package://dope/weights/SaladDressing.pth",

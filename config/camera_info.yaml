@@ -1,20 +1,55 @@
-image_width: 640
-image_height: 480
-camera_name: dope_webcam_0
 camera_matrix:
-  rows: 3
   cols: 3
-  data: [641.5, 0, 320.0, 0, 641.5, 240.0, 0, 0, 1]
-distortion_model: plumb_bob
+  data:
+  - 610.0970759327062
+  - 0.0
+  - 239.369974778896
+  - 0.0
+  - 596.3090914563569
+  - 235.0726173420544
+  - 0.0
+  - 0.0
+  - 1.0
+  rows: 3
+camera_name: dope_webcam_-1
 distortion_coefficients:
-  rows: 1
   cols: 5
-  data: [0, 0, 0, 0, 0]
-rectification_matrix:
-  rows: 3
-  cols: 3
-  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+  data:
+  - 0.15051097612528042
+  - -0.13525850770080228
+  - 0.007849286296830843
+  - -0.050646181422273215
+  - 0.0
+  rows: 1
+distortion_model: plumb_bob
+image_height: 480
+image_width: 640
 projection_matrix:
-  rows: 3
   cols: 4
-  data: [641.5, 0, 320.0, 0, 0, 641.5, 240.0, 0, 0, 0, 1, 0]
+  data:
+  - 606.73095703125
+  - 0.0
+  - 214.22109726838244
+  - 0.0
+  - 0.0
+  - 636.1278686523438
+  - 237.6406924938492
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  - 0.0
+  rows: 3
+rectification_matrix:
+  cols: 3
+  data:
+  - 1.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+  rows: 3

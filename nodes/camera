@@ -14,10 +14,11 @@ from camera_info_manager import CameraInfoManager
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image, CameraInfo
 import sys
-
+import pyrealsense2 as rs
+import numpy as np
 
 def publish_images(freq=100):
-    cam_index = 0  # index of camera to capture
+    cam_index = -1  # index of camera to capture
 
     ### initialize ROS publishers etc.
     rospy.init_node('dope_webcam')
@@ -41,22 +42,45 @@ def publish_images(freq=100):
     if not info_manager.isCalibrated():
         rospy.logwarn('Camera is not calibrated, please supply a valid camera_info_url parameter!')
 
-    ### open camera
-    cap = cv2.VideoCapture(cam_index)
-    if not cap.isOpened():
-        rospy.logfatal("ERROR:  Unable to open camera for capture.  Is camera plugged in?")
-        sys.exit(1)
+    # Configure depth and color streams
+    pipeline = rs.pipeline()
+    config = rs.config()
 
-    rospy.loginfo("Publishing images from camera %s to topic '%s'...", cam_index, img_topic)
-    rospy.loginfo("Ctrl-C to stop")
+    # Get device product line for setting a supporting resolution
+    pipeline_wrapper = rs.pipeline_wrapper(pipeline)
+    pipeline_profile = config.resolve(pipeline_wrapper)
+    device = pipeline_profile.get_device()
+    device_product_line = str(device.get_info(rs.camera_info.product_line))
+
+    found_rgb = False
+    for s in device.sensors:
+        if s.get_info(rs.camera_info.name) == 'RGB Camera':
+            found_rgb = True
+            break
+    if not found_rgb:
+        print("The demo requires Depth camera with Color sensor")
+        exit(0)
+
+    config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+
+    if device_product_line == 'L500':
+        config.enable_stream(rs.stream.color, 960, 540, rs.format.bgr8, 30)
+    else:
+        config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+
+    # Start streaming
+    pipeline.start(config)
+
 
     ### publish images
     rate = rospy.Rate(freq)
     while not rospy.is_shutdown():
-        ret, frame = cap.read()
+        frames = pipeline.wait_for_frames()
+        color_frame = frames.get_color_frame()
+        color_image = np.asanyarray(color_frame.get_data())
 
-        if ret:
-            image = CvBridge().cv2_to_imgmsg(frame, "bgr8")
+        if color_frame:
+            image = CvBridge().cv2_to_imgmsg(color_image, "bgr8")
             image.header.frame_id = 'dope_webcam'
             image.header.stamp = rospy.Time.now()
             image_pub.publish(image)
