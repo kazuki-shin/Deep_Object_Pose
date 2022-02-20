@@ -1,7 +1,7 @@
-# topic_camera: "/dope/webcam/image_raw"
-# topic_camera_info: "/dope/webcam/camera_info"
-topic_camera: "/robot1/camera/image_raw"
-topic_camera_info: "/robot1/camera/camera_info"
+topic_camera: "/dope/webcam/image_raw"
+topic_camera_info: "/dope/webcam/camera_info"
+# topic_camera: "/robot1/camera/image_raw"
+# topic_camera_info: "/robot1/camera/camera_info"
 topic_publishing: "dope"
 input_is_rectified: True   # Whether the input image is rectified (strongly suggested!)
 downscale_height: 480      # if the input image is larger than this, scale it down to this pixel height
@@ -23,17 +23,17 @@ weights: {
     # "Cherries":"package://dope/weights/Cherries.pth", 
     # "ChocolatePudding":"package://dope/weights/ChocolatePudding.pth", 
     # "Cookies":"package://dope/weights/Cookies.pth", 
-    "Corn":"package://dope/weights/Corn.pth", 
-    "CreamCheese":"package://dope/weights/CreamCheese.pth", 
-    "GreenBeans":"package://dope/weights/GreenBeans.pth", 
+    # "Corn":"package://dope/weights/Corn.pth", 
+    # "CreamCheese":"package://dope/weights/CreamCheese.pth", 
+    # "GreenBeans":"package://dope/weights/GreenBeans.pth", 
     # "GranolaBars":"package://dope/weights/GranolaBars.pth", 
     # "Ketchup":"package://dope/weights/Ketchup.pth", 
     # "MacaroniAndCheese":"package://dope/weights/MacaroniAndCheese.pth", 
     # "Mayo":"package://dope/weights/Mayo.pth", 
-    "Milk":"package://dope/weights/Milk.pth", 
+    # "Milk":"package://dope/weights/Milk.pth", 
     # "Mushrooms":"package://dope/weights/Mushrooms.pth", 
     # "Mustard":"package://dope/weights/Mustard.pth", 
-    "Parmesan":"package://dope/weights/Parmesan.pth", 
+    # "Parmesan":"package://dope/weights/Parmesan.pth", 
     # "PeasAndCarrots":"package://dope/weights/PeasAndCarrots.pth",
     # "Peaches":"package://dope/weights/Peaches.pth",
     # "Pineapple":"package://dope/weights/Pineapple.pth",
