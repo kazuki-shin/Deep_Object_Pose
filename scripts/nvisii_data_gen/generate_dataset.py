@@ -5,20 +5,20 @@ import ipdb
 
 # 20 000 images
 
-for i in range(0,2):
+for i in range(0,100):
 	to_call = [
 		# "python",'single_video.py',
 		"python3",'single_video_pybullet.py',
 		'--path_single_obj', 'models/cup/meshes/model.stl',
 		'--path_single_obj_texture', 'models/cup/texture_map.png',
-		'--spp','10',
-		'--nb_frames', '5',
-		'--nb_objects',str(int(random.uniform(5,20))),
-		'--nb_distractors',str(int(random.uniform(5,15))),
-		'--static_camera',
+		'--spp','100',
+		'--nb_frames', '200',
+		'--nb_objects', str(int(random.uniform(10,15))),
+		'--nb_distractors', str(int(random.uniform(0,3))),
+		# '--static_camera',
 		# '--nb_frames', '1',
 		# '--nb_objects',str(1),
-		'--outf',f"dataset_bowl_10k/{str(i).zfill(3)}",
+		'--outf',f"dataset_cup_20k/{str(i).zfill(3)}",
 	]
 	subprocess.call(to_call)
 	# subprocess.call(['mv',f'dataset/{str(i).zfill(3)}/video.mp4',f"dataset/{str(i).zfill(3)}.mp4"])

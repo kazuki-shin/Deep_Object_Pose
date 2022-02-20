@@ -1,5 +1,7 @@
-topic_camera: "/dope/webcam/image_raw"
-topic_camera_info: "/dope/webcam/camera_info"
+# topic_camera: "/dope/webcam/image_raw"
+# topic_camera_info: "/dope/webcam/camera_info"
+topic_camera: "/robot1/camera/image_raw"
+topic_camera_info: "/robot1/camera/camera_info"
 topic_publishing: "dope"
 input_is_rectified: True   # Whether the input image is rectified (strongly suggested!)
 downscale_height: 480      # if the input image is larger than this, scale it down to this pixel height
@@ -173,4 +175,4 @@ overlay_belief_images: True   # Whether to overlay the input image on the belief
 thresh_angle: 0.5
 thresh_map: 0.01
 sigma: 3
-thresh_points: 0.1
+thresh_points: 0.3

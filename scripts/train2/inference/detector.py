@@ -415,8 +415,7 @@ class ObjectDetector(object):
         # Run network inference
         image_tensor = transform(in_img)
         image_torch = Variable(image_tensor).cuda().unsqueeze(0)
-        with torch.cuda.amp.autocast():
-            out, seg = net_model(image_torch)  # run inference using the network (calls 'forward' method)
+        out, seg = net_model(image_torch)  # run inference using the network (calls 'forward' method)
         vertex2 = out[-1][0]
         aff = seg[-1][0]
 
