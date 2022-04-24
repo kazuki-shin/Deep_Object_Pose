@@ -7,8 +7,10 @@ venv
 .idea
 .DS_Store
 ._.DS_Store
+*.vscode
 scripts/nvisii_data_gen/output
 scripts/nvisii_data_gen/dome_hdri_haven
 scripts/nvisii_data_gen/google_scanned_models
-scripts/train2/out_experiment_1/
+scripts/train2/out_experiment*
 scripts/train2/tmp/
+scripts/train2/train_*
