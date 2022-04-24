@@ -187,9 +187,9 @@ visii.enable_denoiser()
 camera = visii.entity.create(
     name = "camera",
     transform = visii.transform.create("camera"),
-    camera = visii.camera.create_perspective_from_fov(
+    camera = visii.camera.create_from_fov(
         name = "camera",
-        field_of_view = 0.785398,
+        field_of_view = 0.7417649,
         aspect = float(opt.width)/float(opt.height)
     )
 )
@@ -324,8 +324,9 @@ def adding_mesh_object(name, obj_to_load,texture_to_load,scale=1):
         )
 
         toy_rgb_tex = visii.texture.create_from_file(name,texture_to_load)
-        toy.get_material().set_base_color_texture(toy_rgb_tex)
-        toy.get_material().set_roughness(random.uniform(0.1,0.5))
+        toy.get_material().set_base_color(visii.vec3(1,1,1))
+        toy.get_material().set_sheen(0)
+        toy.get_material().set_roughness(1)
 
 
 
@@ -467,14 +468,14 @@ plane4_body = p.createMultiBody(
 plane1 = p.createCollisionShape(p.GEOM_PLANE,planeNormal = [-1,0,0])
 plane5_body = p.createMultiBody(
     baseCollisionShapeIndex = plane1,
-    basePosition = [2,0,0],
+    basePosition = [0.7,0,0],
     # baseOrientation= [rot1[3],rot1[0],rot1[1],rot1[2]],
 )
 
 plane1 = p.createCollisionShape(p.GEOM_PLANE,planeNormal = [1,0,0])
 plane6_body = p.createMultiBody(
     baseCollisionShapeIndex = plane1,
-    basePosition = [0.1,0,0],
+    basePosition = [0.2,0,0],
     # baseOrientation= [rot1[3],rot1[0],rot1[1],rot1[2]],
 )
 
@@ -594,6 +595,6 @@ while condition:
 subprocess.call(['ffmpeg', '-y',\
     '-framerate', '30', "-hide_banner", "-loglevel", \
     "panic",'-pattern_type', 'glob', '-i',\
-    f"{opt.outf}/*.png", f"{opt.outf}/video.mp4"]) 
+    f"{opt.outf}/*.png", f"{opt.outf}_video.mp4"]) 
 
 visii.deinitialize()
